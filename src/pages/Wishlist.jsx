@@ -26,34 +26,35 @@ function Wishlist() {
   return (
     <div className="container-page">
       <h2 className="text-center mb-4">My Wishlist</h2>
+      {wishlistItems.length === 0 ? (
+        <div className="alert alert-info text-center">
+          No products found in your wishlist.
+        </div>
+      ) : (
+        <div className="row">
+          {wishlistItems.map((item) => (
+            <div className="col-md-4 mb-4" key={item.id}>
+              <div className="card product-card h-100">
+                <div className="card-body d-flex flex-column">
+                  <h4 className="card-title">{item.product_name}</h4>
 
-      <div className="row">
-        {wishlistItems.map((item) => (
-          <div className="col-md-4 mb-4" key={item.id}>
-            <div className="card product-card h-100">
-              <div className="card-body d-flex flex-column">
-                <h4 className="card-title">{item.product_name}</h4>
+                  <p>
+                    <span className="badge bg-success">
+                      ₹ {item.product_price}
+                    </span>
+                  </p>
 
-                <p>
-                  <span className="badge bg-success">
-                    ₹ {item.product_price}
-                  </span>
-                </p>
-
-                <p>
-                  <span className="badge bg-primary">
-                    Stock : {item.stock_quantity}
-                  </span>
-                </p>
-
-                <button className="btn btn-outline-danger mt-auto">
-                  ❤️ Wishlist
-                </button>
+                  <p>
+                    <span className="badge bg-primary">
+                      Stock : {item.stock_quantity}
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
