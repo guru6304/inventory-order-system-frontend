@@ -1,0 +1,7 @@
+@import "./styles/global.css";
+@import "./styles/navbar.css";
+@import "./styles/auth.css";
+@import "./styles/products.css";
+@import "./styles/orders.css";
+@import "./styles/admin.css";
+@import "./styles/footer.css";

@@ -1,0 +1,19 @@
+.btn-danger{
+
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+.btn-danger:hover{
+
+    transform:scale(1.03);
+
+}
+
+.admin-title{
+
+    font-weight:bold;
+
+}
