@@ -3,10 +3,12 @@ import { getProducts } from "../api/ProductApi";
 import { Link } from "react-router-dom";
 import { addToWishlist } from "../api/WishlistApi";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { useAuth } from "../context/AuthContext";
 
 function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -68,12 +70,18 @@ function Products() {
                     View Details
                   </Link>
 
-                  <button
-                    className="btn btn-warning w-100"
-                    onClick={() => handleWishlist(product.id)}
-                  >
-                    ❤️ Add to Wishlist
-                  </button>
+                  {user ? (
+                    <button
+                      className="btn btn-warning w-100"
+                      onClick={() => handleWishlist(product.id)}
+                    >
+                      ❤️ Add to Wishlist
+                    </button>
+                  ) : (
+                    <Link to="/login" className="btn btn-secondary w-100">
+                      Login to Add Wishlist
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
