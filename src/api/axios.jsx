@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL:"https://endearing-learning-production-acc0.up.railway.app/api",
+    baseURL:process.env.REACT_APP_API_URL,
     headers:{"Content-Type":"application/json"}
 });
     api.interceptors.request.use((config)=>{
