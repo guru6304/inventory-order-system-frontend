@@ -1,21 +1,22 @@
-.footer{
-
-    background:#212529;
-
-    color:white;
-
-    text-align:center;
-
-    padding:20px;
-
-    margin-top:40px;
-
+/* Add this to your main app container (e.g., #root or .app-wrapper) */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.footer p{
+/* Your updated footer */
+.footer {
+  background: #212529;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  
+  /* Replace margin-top: 40px with auto */
+  margin-top: auto; 
+}
 
-    margin:5px 0;
-
-    font-size:15px;
-
+.footer p {
+  margin: 5px 0;
+  font-size: 15px;
 }

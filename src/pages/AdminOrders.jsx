@@ -41,15 +41,19 @@ function AdminOrders() {
         <table className="table table-bordered bg-white">
           <thead className="table-dark">
             <tr>
+              <th>User name</th>
               <th>Order ID</th>
               <th>Status</th>
               <th>Total Amount</th>
-              <th>Action</th>
+              {/* <th>Action</th> */}
             </tr>
           </thead>
           <tbody>
-            {orders.map(order => (
+            {orders.map((order,index) => (
               <tr key={order.id}>
+                <td>
+                    {orders[index].user}
+                </td>
                 <td>#{order.id}</td>
                 <td>
                   <span className={`badge ${order.status === 'pending' ? 'bg-warning' : 'bg-success'}`}>
@@ -57,13 +61,13 @@ function AdminOrders() {
                   </span>
                 </td>
                 <td>₹{order.total_amount}</td>
-                <td>
+                {/* <td>
                   {order.status === 'pending' && (
                     <button className="btn btn-success btn-sm" onClick={() => handleConfirm(order.id)}>
                       Confirm Order
                     </button>
                   )}
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>

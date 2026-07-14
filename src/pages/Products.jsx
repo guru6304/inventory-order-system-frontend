@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getProducts } from "../api/ProductApi";
 import { Link } from "react-router-dom";
 import { addToWishlist } from "../api/WishlistApi";
+import { createOrder } from "../api/OrderApi";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useAuth } from "../context/AuthContext";
 
@@ -12,9 +13,7 @@ function Products() {
   const [totalPages, setTotalPages] = useState(1);
   const { user } = useAuth();
 
-  const rawApiUrl =
-    import.meta.env.VITE_API_URL ||
-    "https://inventory-order-system-backend-ir7d.onrender.com/api";
+  const rawApiUrl = process.env.REACT_APP_API_URL
   const backendURL = rawApiUrl.replace(/\/api\/?$/, "");
 
   useEffect(() => {
@@ -41,6 +40,23 @@ function Products() {
       alert("Added to Wishlist Successfully");
     } catch (err) {
       alert(err.response?.data?.message || "Wishlist Failed");
+    }
+  };
+
+  const handleOrder = async (product) => {
+    const confirmOrder = window.confirm(
+      `Warning: You are about to place an order for ${product.name} at ₹${product.price}. Do you want to confirm?`
+    );
+
+    if (confirmOrder) {
+      try {
+        // Backend expects an array of items with product_id and quantity
+        const payload = [{ product_id: product.id, quantity: 1}];
+        await createOrder(payload);
+        alert("Order Confirmed Successfully! Check 'My Orders' for details.");
+      } catch (err) {
+        alert(err.response?.data?.message || "Order Failed to Process");
+      }
     }
   };
 
@@ -96,15 +112,23 @@ function Products() {
                     </Link>
 
                     {user ? (
-                      <button
-                        className="btn btn-warning w-100"
-                        onClick={() => handleWishlist(product.id)}
-                      >
-                        ❤️ Add to Wishlist
-                      </button>
+                      <>
+                        <button
+                          className="btn btn-success w-100 mb-2"
+                          onClick={() => handleOrder(product)}
+                        >
+                          🛍️ Order Now
+                        </button>
+                        <button
+                          className="btn btn-warning w-100"
+                          onClick={() => handleWishlist(product.id)}
+                        >
+                          ❤️ Add to Wishlist
+                        </button>
+                      </>
                     ) : (
                       <Link to="/login" className="btn btn-secondary w-100">
-                        Login to Add Wishlist
+                        Login to Interact
                       </Link>
                     )}
                   </div>

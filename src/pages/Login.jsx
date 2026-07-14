@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getMe, login } from "../api/AuthApi";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function Login() {
   const navigate = useNavigate();
@@ -16,6 +17,9 @@ function Login() {
       [e.target.name]: e.target.value,
     });
   };
+  useEffect(()=>{
+localStorage.removeItem('token')
+  },[])
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
