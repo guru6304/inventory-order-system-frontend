@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { deleteProduct } from "../api/AdminProductApi";
+import { deleteProduct, createProduct } from "../api/AdminProductApi";
 import { getProducts } from "../api/ProductApi";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [file, setFile] = useState(null);
+  const [formData, setFormData] = useState({ category_id: "", name: "", description: "", price: "", stock_quantity: "" });
+
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -17,17 +20,35 @@ function AdminProducts() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const handleFileChange = (e) => setFile(e.target.files[0]);
+
+  const handleAddProduct = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    Object.keys(formData).forEach(key => data.append(key, formData[key]));
+    if (file) data.append("image", file);
+
+    try {
+      await createProduct(data);
+      alert("Product Added Successfully");
+      fetchProducts();
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to add product");
+    }
+  };
+
   const handleDelete = async (productId) => {
-    
-        const confirmDelete = window.confirm(
-            "Are you sure you want to delete this product?"
-        );
-        if (!confirmDelete) {
-            return;
-        }
+    const confirmDelete = window.confirm(
+        "Are you sure you want to delete this product?"
+    );
+    if (!confirmDelete) {
+        return;
+    }
     try {
       await deleteProduct(productId);
       alert("Deleted Product Successfully");
@@ -36,12 +57,41 @@ function AdminProducts() {
       alert(err.response?.data?.message || "Delete Product Failed");
     }
   };
+
   if (loading) {
     return <LoadingSpinner />;
   }
+
   return (
     <div className="container-page">
       <h2 className="text-center mb-4">Admin Products</h2>
+
+      <div className="card-box mb-4">
+        <h4>Add New Product</h4>
+        <form onSubmit={handleAddProduct} className="row g-3">
+          <div className="col-md-6">
+            <input className="form-control" placeholder="Product Name" onChange={e => setFormData({...formData, name: e.target.value})} required />
+          </div>
+          <div className="col-md-6">
+            <input className="form-control" placeholder="Category ID" type="number" onChange={e => setFormData({...formData, category_id: e.target.value})} required />
+          </div>
+          <div className="col-md-4">
+            <input className="form-control" placeholder="Price" type="number" onChange={e => setFormData({...formData, price: e.target.value})} required />
+          </div>
+          <div className="col-md-4">
+            <input className="form-control" placeholder="Stock Quantity" type="number" onChange={e => setFormData({...formData, stock_quantity: e.target.value})} required />
+          </div>
+          <div className="col-md-4">
+            <input className="form-control" type="file" onChange={handleFileChange} />
+          </div>
+          <div className="col-12">
+            <input className="form-control" placeholder="Description" onChange={e => setFormData({...formData, description: e.target.value})} required />
+          </div>
+          <div className="col-12">
+            <button type="submit" className="btn btn-primary">Add Product</button>
+          </div>
+        </form>
+      </div>
 
       <div className="row">
         {products.map((product) => (

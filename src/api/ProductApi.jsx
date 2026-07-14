@@ -1,7 +1,7 @@
 import api from "./axios";
 
-export const getProducts = ()=>{
-    return api.get("/products");
+export const getProducts = (page = 1, limit = 10) => {
+    return api.get(`/products?page=${page}&limit=${limit}`);
 }
 
 export const getProductById = (id)=>{

@@ -8,14 +8,21 @@ import { useAuth } from "../context/AuthContext";
 function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const { user } = useAuth();
+  
+  const backendURL = import.meta.env.REACT_APP_API_URL?.replace('/api', '') || "http://localhost:5000";
 
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const response = await getProducts();
+        const response = await getProducts(page, 10);
         setProducts(response.data.data);
+        if (response.data.pagination) {
+            setTotalPages(response.data.pagination.totalPages);
+        }
       } catch (err) {
         alert(err.response?.data?.message || "Product Fetch Failed");
       } finally {
@@ -23,7 +30,8 @@ function Products() {
       }
     };
     fetchProducts();
-  }, []);
+  }, [page]);
+
   const handleWishlist = async (productId) => {
     try {
       await addToWishlist(productId);
@@ -32,9 +40,11 @@ function Products() {
       alert(err.response?.data?.message || "Wishlist Failed");
     }
   };
+
   if (loading) {
     return <LoadingSpinner />;
   }
+
   return (
     <div className="container-page">
       <h2 className="text-center mb-4">Products</h2>
@@ -43,6 +53,16 @@ function Products() {
         {products.map((product) => (
           <div className="col-md-4 mb-4" key={product.id}>
             <div className="card product-card h-100">
+              
+              {product.file_name && (
+                <img 
+                  src={`${backendURL}/${product.folder_name}/${product.file_name}`} 
+                  alt={product.name} 
+                  className="card-img-top" 
+                  style={{ height: '200px', objectFit: 'cover' }}
+                />
+              )}
+
               <div className="card-body d-flex flex-column">
                 <h4 className="card-title">{product.name}</h4>
 
@@ -87,6 +107,12 @@ function Products() {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="d-flex justify-content-center mt-4">
+        <button className="btn btn-secondary me-2" disabled={page === 1} onClick={() => setPage(page - 1)}>Previous</button>
+        <span className="align-self-center fw-bold px-3">Page {page} of {totalPages}</span>
+        <button className="btn btn-secondary ms-2" disabled={page === totalPages} onClick={() => setPage(page + 1)}>Next</button>
       </div>
     </div>
   );
