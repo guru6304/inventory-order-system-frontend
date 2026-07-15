@@ -9,10 +9,7 @@ This frontend communicates with a REST API built using Express.js and MySQL with
 ## Live Demo
 
 Frontend:
-https://inventory-order-system-frontend-omega.vercel.app
-
-Backend API:
-https://endearing-learning-production-acc0.up.railway.app/api/products
+https://inventory-order-system-frontend-git-main-guruswamy.vercel.app/login
 
 ---
 
@@ -84,7 +81,7 @@ https://endearing-learning-production-acc0.up.railway.app/api/products
 ### Deployment
 
 - Vercel
-- Railway
+- Render
 
 ---
 
@@ -191,7 +188,7 @@ Some improvements planned for future versions include:
 
 ## Author
 
-Developed by **Guru**
+Developed by **Guru Swamy Lanka**
 
 GitHub:
 https://github.com/guru6304
